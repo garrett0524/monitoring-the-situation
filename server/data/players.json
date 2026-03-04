@@ -1,0 +1,52 @@
+[
+  {
+    "id": "trump", "side": "US", "name": "Donald Trump", "title": "President of the United States",
+    "photo": null, "bio": "45th and 47th President of the United States. Previously ordered the strike that killed IRGC commander Qasem Soleimani in January 2020.",
+    "stance": 3, "stanceLabel": "Hawkish"
+  },
+  {
+    "id": "hegseth", "side": "US", "name": "Pete Hegseth", "title": "Secretary of Defense",
+    "photo": null, "bio": "US Secretary of Defense. Oversees military posture in the Middle East including CENTCOM operations.",
+    "stance": 3, "stanceLabel": "Hawkish"
+  },
+  {
+    "id": "rubio", "side": "US", "name": "Marco Rubio", "title": "Secretary of State",
+    "photo": null, "bio": "US Secretary of State. Leads diplomatic efforts and sanctions coordination on Iran.",
+    "stance": 3, "stanceLabel": "Hawkish"
+  },
+  {
+    "id": "kurilla", "side": "US", "name": "Gen. Michael Kurilla", "title": "CENTCOM Commander",
+    "photo": null, "bio": "Commander of US Central Command, overseeing all military operations in the Middle East region.",
+    "stance": 2, "stanceLabel": "Moderate-Hawkish"
+  },
+  {
+    "id": "brown", "side": "US", "name": "Gen. CQ Brown", "title": "Chairman, Joint Chiefs of Staff",
+    "photo": null, "bio": "Senior military advisor to the President and Secretary of Defense.",
+    "stance": 2, "stanceLabel": "Moderate"
+  },
+  {
+    "id": "khamenei", "side": "Iran", "name": "Ali Khamenei", "title": "Supreme Leader of Iran",
+    "photo": null, "bio": "Iran's Supreme Leader since 1989, holds ultimate authority over military and foreign policy.",
+    "stance": 5, "stanceLabel": "Hardline"
+  },
+  {
+    "id": "pezeshkian", "side": "Iran", "name": "Masoud Pezeshkian", "title": "President of Iran",
+    "photo": null, "bio": "Iranian President elected in 2024, considered a relative moderate within the system.",
+    "stance": 2, "stanceLabel": "Moderate"
+  },
+  {
+    "id": "salami", "side": "Iran", "name": "Maj. Gen. Hossein Salami", "title": "IRGC Commander-in-Chief",
+    "photo": null, "bio": "Commander of the Islamic Revolutionary Guard Corps since 2019.",
+    "stance": 5, "stanceLabel": "Hardline"
+  },
+  {
+    "id": "araghchi", "side": "Iran", "name": "Abbas Araghchi", "title": "Foreign Minister of Iran",
+    "photo": null, "bio": "Iranian Foreign Minister, former nuclear negotiator, leads diplomatic outreach.",
+    "stance": 2, "stanceLabel": "Moderate"
+  },
+  {
+    "id": "tangsiri", "side": "Iran", "name": "Adm. Ali Reza Tangsiri", "title": "IRGC Navy Commander",
+    "photo": null, "bio": "Commander of the IRGC Navy, responsible for Persian Gulf and Strait of Hormuz operations.",
+    "stance": 4, "stanceLabel": "Hawkish"
+  }
+]

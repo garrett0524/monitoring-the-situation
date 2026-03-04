@@ -1,0 +1,9 @@
+[
+  { "id": "fordow", "name": "Fordow Fuel Enrichment Plant", "type": "nuclear", "lat": 34.8854, "lng": 50.9950, "strikeRadius": 200, "description": "Underground uranium enrichment facility" },
+  { "id": "natanz", "name": "Natanz Nuclear Facility", "type": "nuclear", "lat": 33.7221, "lng": 51.7268, "strikeRadius": 300, "description": "Primary uranium enrichment site" },
+  { "id": "bushehr", "name": "Bushehr Nuclear Power Plant", "type": "nuclear", "lat": 28.8297, "lng": 50.8877, "strikeRadius": 200, "description": "Iran's first nuclear power plant" },
+  { "id": "bandar-abbas", "name": "Bandar Abbas Naval Base", "type": "naval", "lat": 27.1865, "lng": 56.2808, "strikeRadius": 150, "description": "Main IRIN base near Strait of Hormuz" },
+  { "id": "jask", "name": "Jask Naval Base", "type": "naval", "lat": 25.6500, "lng": 57.7667, "strikeRadius": 150, "description": "Strategic new naval base outside Strait of Hormuz" },
+  { "id": "isfahan", "name": "Isfahan Military Complex", "type": "air", "lat": 32.6707, "lng": 51.6650, "strikeRadius": 250, "description": "Major military-industrial complex" },
+  { "id": "kharg-island", "name": "Kharg Island Oil Terminal", "type": "infrastructure", "lat": 29.2333, "lng": 50.3167, "strikeRadius": 0, "description": "Iran's main oil export terminal, handles ~90% of exports" }
+]

@@ -1,0 +1,10 @@
+[
+  { "id": "al-udeid", "name": "Al Udeid Air Base", "country": "Qatar", "allegiance": "US", "type": "air", "lat": 25.1173, "lng": 51.3150, "description": "Largest US air base in Middle East, home to AFCENT" },
+  { "id": "al-dhafra", "name": "Al Dhafra Air Base", "country": "UAE", "allegiance": "US", "type": "air", "lat": 24.2480, "lng": 54.5477, "description": "US Air Force base, hosts F-35s and surveillance aircraft" },
+  { "id": "bahrain-5th-fleet", "name": "NSA Bahrain / 5th Fleet HQ", "country": "Bahrain", "allegiance": "US", "type": "naval", "lat": 26.2172, "lng": 50.5677, "description": "Headquarters of US Naval Forces Central Command and 5th Fleet" },
+  { "id": "camp-arifjan", "name": "Camp Arifjan", "country": "Kuwait", "allegiance": "US", "type": "army", "lat": 29.1167, "lng": 48.0667, "description": "Major US Army base, logistics hub" },
+  { "id": "ali-al-salem", "name": "Ali Al Salem Air Base", "country": "Kuwait", "allegiance": "US", "type": "air", "lat": 29.3467, "lng": 47.5236, "description": "US Air Force forward operating base" },
+  { "id": "eskan-village", "name": "Eskan Village Air Base", "country": "Saudi Arabia", "allegiance": "US", "type": "air", "lat": 24.4875, "lng": 46.6361, "description": "US Air Force base near Riyadh" },
+  { "id": "diego-garcia", "name": "Diego Garcia", "country": "BIOT", "allegiance": "US", "type": "naval", "lat": -7.3195, "lng": 72.4231, "description": "Strategic US/UK naval and air base in Indian Ocean" },
+  { "id": "camp-lemonnier", "name": "Camp Lemonnier", "country": "Djibouti", "allegiance": "US", "type": "joint", "lat": 11.5467, "lng": 43.1569, "description": "Only permanent US military base in Africa" }
+]
