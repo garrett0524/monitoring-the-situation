@@ -25,7 +25,7 @@ export default function Header() {
           <div className="absolute inset-0 rounded-full border border-[#00ff88] opacity-30 radar-sweep origin-center" style={{ borderRightColor: 'transparent' }} />
           <div className="absolute inset-[6px] rounded-full bg-[#00ff88] pulse-dot" />
         </div>
-        <span className="mono text-lg font-bold tracking-widest text-[#00ff88] uppercase">
+        <span className="mono text-sm md:text-lg font-bold tracking-wide md:tracking-widest text-[#00ff88] uppercase">
           Monitoring the Situation
         </span>
       </div>
@@ -39,7 +39,7 @@ export default function Header() {
           ● {systemStatus.toUpperCase()}
         </span>
         {lastUpdated && (
-          <span className="opacity-50">UPDATED {new Date(lastUpdated).toLocaleTimeString()}</span>
+          <span className="opacity-50 hidden sm:inline">UPDATED {new Date(lastUpdated).toLocaleTimeString()}</span>
         )}
         <button
           onClick={toggleScanlines}

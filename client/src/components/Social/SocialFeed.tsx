@@ -57,7 +57,7 @@ export default function SocialFeed() {
           </span>
         </div>
         {/* Legend */}
-        <div className="flex gap-2">
+        <div className="hidden md:flex gap-2">
           {Object.entries(CAT_LABEL).map(([k, v]) => (
             <span key={k} className="mono text-[8px]" style={{ color: CAT_COLOR[k], opacity: 0.7 }}>
               {v}

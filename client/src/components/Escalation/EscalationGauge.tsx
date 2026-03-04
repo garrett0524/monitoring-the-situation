@@ -60,7 +60,7 @@ export default function EscalationGauge() {
       </div>
 
       {/* Description */}
-      <div className="flex-shrink-0 max-w-[200px]">
+      <div className="flex-shrink-0 max-w-[200px] hidden md:block">
         <p className="text-[11px] opacity-50 leading-relaxed">{current.desc}</p>
         <div className="mono text-[9px] opacity-20 mt-1">AUTOMATED · NOT AN INTEL PRODUCT</div>
       </div>

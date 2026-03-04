@@ -288,7 +288,7 @@ export default function MapView() {
     ({ position: 'absolute', zIndex: 1000, pointerEvents: 'auto', ...extra });
 
   return (
-    <div className="panel relative" style={{ height: '420px' }}>
+    <div className="panel relative h-[280px] md:h-[420px]">
 
       {/* Layer + type filter — top-left */}
       <div style={ov({ top: 8, left: 8, minWidth: 88, maxWidth: 110 })} className="panel px-2 py-1.5 space-y-1">

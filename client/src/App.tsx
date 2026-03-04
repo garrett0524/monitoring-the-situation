@@ -27,24 +27,24 @@ export default function App() {
         <EventTimeline />
 
         {/* Row 4: Map + News Feed */}
-        <div className="flex gap-2">
-          <div className="flex-[6]">
+        <div className="flex flex-col md:flex-row gap-2">
+          <div className="md:flex-[6]">
             <MapView />
           </div>
-          <div className="flex-[4]" style={{ height: '420px' }}>
+          <div className="h-[360px] md:flex-[4] md:h-[420px]">
             <NewsFeed />
           </div>
         </div>
 
         {/* Row 5: Players + AI Analysis + Social Signals */}
-        <div className="flex gap-2">
-          <div className="flex-[1]" style={{ minHeight: '320px' }}>
+        <div className="flex flex-col md:flex-row gap-2">
+          <div className="md:flex-[1] min-h-[280px] md:min-h-[320px]">
             <PlayerPanel />
           </div>
-          <div className="flex-[1]" style={{ minHeight: '320px' }}>
+          <div className="md:flex-[1] min-h-[280px] md:min-h-[320px]">
             <AIAnalysis />
           </div>
-          <div className="flex-[1]" style={{ minHeight: '320px' }}>
+          <div className="md:flex-[1] min-h-[280px] md:min-h-[320px]">
             <SocialFeed />
           </div>
         </div>
