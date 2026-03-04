@@ -21,7 +21,7 @@ const IMPACT_COLOR: Record<Impact, string> = {
   neutral: '#6b7280',
 };
 
-const CAT_ICON: Record<Category, string> = {
+const _CAT_ICON: Record<Category, string> = {
   military: '⊕',
   diplomatic: '⚑',
   economic: '$',
