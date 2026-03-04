@@ -12,6 +12,11 @@ interface Vessel {
   id: string; name: string; allegiance: string; type: string;
   description: string; track: [number, number][];
 }
+interface ShipEstimate {
+  id: string; name: string; allegiance: string;
+  lat: number; lng: number; confidenceKm: number;
+  reasoning: string; generatedAt: string;
+}
 
 const TYPE_COLOR: Record<string, string> = {
   naval: '#4a9eff', air: '#00ff88', army: '#a3e635',
@@ -38,6 +43,44 @@ function makeMarkerEl(type: string, allegiance: string, pulse = false): HTMLElem
   `;
   div.textContent = symbol;
   return div;
+}
+
+function makeEstimateMarkerEl(allegiance: string): HTMLElement {
+  const border = allegiance === 'US' ? '#4a9eff' : '#ff3b3b';
+  const div = document.createElement('div');
+  div.style.cssText = `
+    width:30px;height:30px;background:rgba(10,15,26,0.5);
+    border:2px dashed ${border};border-radius:4px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;color:${border};cursor:pointer;opacity:0.7;
+  `;
+  div.textContent = '⚓';
+  return div;
+}
+
+function estimatePopupHtml(e: ShipEstimate): string {
+  const c = e.allegiance === 'US' ? '#4a9eff' : '#ff3b3b';
+  const ago = Math.round((Date.now() - new Date(e.generatedAt).getTime()) / 60000);
+  return `<div style="font-family:monospace;font-size:12px;min-width:200px;background:#111827;color:#e0e7ef;padding:6px 8px;border-radius:4px;">
+    <div style="color:#ff9500;font-size:9px;margin-bottom:3px;">⚠ AI ESTIMATED POSITION</div>
+    <b style="color:${c}">${e.name}</b><br>
+    <span style="opacity:0.7">NAVAL · ${e.allegiance} · ESTIMATED</span><br>
+    <span style="opacity:0.6;font-size:11px">${e.reasoning}</span><br>
+    <span style="opacity:0.4;font-size:10px">Confidence radius: ±${e.confidenceKm}km · Est. ${ago}m ago</span>
+  </div>`;
+}
+
+// Approximate a circle as GeoJSON polygon (for Mapbox fill layer)
+function circleGeoJSON(lat: number, lng: number, radiusKm: number) {
+  const pts = 32;
+  const coords = Array.from({ length: pts + 1 }, (_, i) => {
+    const a = (i / pts) * 2 * Math.PI;
+    return [
+      lng + (radiusKm / (111 * Math.cos(lat * Math.PI / 180))) * Math.cos(a),
+      lat + (radiusKm / 111) * Math.sin(a),
+    ];
+  });
+  return { type: 'Feature' as const, geometry: { type: 'Polygon' as const, coordinates: [coords] }, properties: {} };
 }
 
 function popupHtml(a: Asset): string {
@@ -71,8 +114,9 @@ export default function MapView() {
   const [mapReady,   setMapReady]   = useState(false);
   const [useLeaflet, setUseLeaflet] = useState(false);
   const { mapLayers, toggleLayer } = useAppStore();
-  const [activeTypes, setActiveTypes] = useState<Set<AssetType>>(new Set(ALL_TYPES));
-  const [showTracks,  setShowTracks]  = useState(true);
+  const [activeTypes,    setActiveTypes]    = useState<Set<AssetType>>(new Set(ALL_TYPES));
+  const [showTracks,     setShowTracks]     = useState(true);
+  const [showEstimates,  setShowEstimates]  = useState(true);
 
   const { data } = useQuery({
     queryKey: ['assets'],
@@ -82,6 +126,13 @@ export default function MapView() {
     queryKey: ['vessels'],
     queryFn: async () => (await axios.get('/api/vessels')).data,
     refetchInterval: 60_000,
+  });
+  const { data: estimateData } = useQuery({
+    queryKey: ['ship-estimates'],
+    queryFn: async () => (await axios.get('/api/ship-estimates')).data,
+    refetchInterval: 2 * 60 * 60 * 1000, // 2 hours — matches server cache
+    staleTime: 100 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   // ── Mapbox init ──────────────────────────────────────────────────────────────
@@ -161,18 +212,40 @@ export default function MapView() {
     const iranian: Asset[] = mapLayers.iranian  ? (data?.iranianSites ?? []) : [];
     const assets = [...bases, ...iranian].filter(a => activeTypes.has(a.type as AssetType));
     const vessels: Vessel[] = (vesselData?.vessels ?? []).filter(() => activeTypes.has('naval'));
+    const estimates: ShipEstimate[] = showEstimates && activeTypes.has('naval')
+      ? (estimateData?.estimates ?? []) : [];
 
     if (useLeaflet) {
-      renderLeaflet(assets, vessels);
+      renderLeaflet(assets, vessels, estimates);
     } else {
-      renderMapbox(assets, vessels);
+      renderMapbox(assets, vessels, estimates);
     }
-  }, [mapReady, data, vesselData, mapLayers, activeTypes, showTracks, useLeaflet]);
+  }, [mapReady, data, vesselData, estimateData, mapLayers, activeTypes, showTracks, showEstimates, useLeaflet]);
 
-  function renderLeaflet(assets: Asset[], vessels: Vessel[]) {
+  function renderLeaflet(assets: Asset[], vessels: Vessel[], estimates: ShipEstimate[]) {
     import('leaflet').then(L => {
       const map = mapRef.current;
       if (!map) return;
+
+      // AI estimated positions — draw circle first (below marker)
+      estimates.forEach(e => {
+        const c = e.allegiance === 'US' ? '#4a9eff' : '#ff3b3b';
+        const circle = L.default.circle([e.lat, e.lng], {
+          radius: e.confidenceKm * 1000,
+          color: c, fillColor: c,
+          fillOpacity: 0.05, opacity: 0.3,
+          dashArray: '6 4', weight: 1,
+        }).addTo(map);
+        mbLayersRef.current.push(circle as any);
+        const icon = L.default.divIcon({
+          html: makeEstimateMarkerEl(e.allegiance).outerHTML,
+          iconSize: [30, 30], iconAnchor: [15, 15], className: '',
+        });
+        markersRef.current.push(
+          L.default.marker([e.lat, e.lng], { icon })
+            .addTo(map).bindPopup(estimatePopupHtml(e), { className: '' })
+        );
+      });
 
       assets.forEach(a => {
         const allegiance = a.allegiance ?? (a.type === 'nuclear' ? 'Iran' : 'US');
@@ -215,11 +288,31 @@ export default function MapView() {
     });
   }
 
-  function renderMapbox(assets: Asset[], vessels: Vessel[]) {
+  function renderMapbox(assets: Asset[], vessels: Vessel[], estimates: ShipEstimate[]) {
     import('mapbox-gl').then(mb => {
       const map = mapRef.current;
       if (!map) return;
       const mapboxgl = mb.default as any;
+
+      // AI estimated positions — uncertainty circles + dashed markers
+      estimates.forEach(e => {
+        const c = e.allegiance === 'US' ? '#4a9eff' : '#ff3b3b';
+        const srcId = `est-circle-${e.id}`;
+        const layId = `est-fill-${e.id}`;
+        const outlineId = `est-outline-${e.id}`;
+        map.addSource(srcId, { type: 'geojson', data: circleGeoJSON(e.lat, e.lng, e.confidenceKm) });
+        map.addLayer({ id: layId, type: 'fill', source: srcId, paint: { 'fill-color': c, 'fill-opacity': 0.05 } });
+        map.addLayer({ id: outlineId, type: 'line', source: srcId, paint: { 'line-color': c, 'line-opacity': 0.3, 'line-width': 1, 'line-dasharray': [3, 2] } });
+        mbSourcesRef.current.push(srcId);
+        mbLayersRef.current.push(layId, outlineId);
+
+        const el = makeEstimateMarkerEl(e.allegiance);
+        const popup = new mapboxgl.Popup({ offset: 15, className: 'mapbox-tactical-popup' })
+          .setHTML(estimatePopupHtml(e));
+        markersRef.current.push(
+          new mapboxgl.Marker({ element: el }).setLngLat([e.lng, e.lat]).setPopup(popup).addTo(map)
+        );
+      });
 
       // Point markers
       assets.forEach(a => {
@@ -302,6 +395,10 @@ export default function MapView() {
         <label className="flex items-center gap-1 cursor-pointer mono text-[10px]">
           <input type="checkbox" checked={showTracks} onChange={() => setShowTracks(v => !v)} className="accent-[#00ff88] w-3 h-3" />
           <span className="opacity-60">TRACKS</span>
+        </label>
+        <label className="flex items-center gap-1 cursor-pointer mono text-[10px]">
+          <input type="checkbox" checked={showEstimates} onChange={() => setShowEstimates(v => !v)} className="accent-[#ff9500] w-3 h-3" />
+          <span style={{ color: '#ff9500', opacity: 0.8 }}>AI EST</span>
         </label>
 
         <div className="mono text-[9px] opacity-30 tracking-widest pt-1 border-t border-[#1e3a5f]">TYPES</div>

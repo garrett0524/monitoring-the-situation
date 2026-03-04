@@ -11,6 +11,7 @@ import playersRouter from './routes/players.js';
 import analysisRouter from './routes/analysis.js';
 import vesselsRouter from './routes/vessels.js';
 import socialRouter  from './routes/social.js';
+import shipEstimatesRouter from './routes/shipEstimates.js';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 
@@ -47,8 +48,9 @@ app.use('/api/escalation', httpCache(60),   escalationRouter);
 app.use('/api/timeline',   httpCache(3600), timelineRouter);
 app.use('/api/players',    httpCache(3600), playersRouter);
 app.use('/api/analysis',   httpCache(840),  analysisRouter);
-app.use('/api/vessels',    httpCache(60),   vesselsRouter);
-app.use('/api/social',     httpCache(300),  socialRouter);
+app.use('/api/vessels',         httpCache(60),   vesselsRouter);
+app.use('/api/social',          httpCache(300),  socialRouter);
+app.use('/api/ship-estimates',  httpCache(7200), shipEstimatesRouter);
 
 app.get('/api/health', (_req, res) => {
   res.set('Cache-Control', 'no-store');
