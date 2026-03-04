@@ -21,13 +21,6 @@ const IMPACT_COLOR: Record<Impact, string> = {
   neutral: '#6b7280',
 };
 
-const _CAT_ICON: Record<Category, string> = {
-  military: '⊕',
-  diplomatic: '⚑',
-  economic: '$',
-  cyber: '>_',
-  humanitarian: '♥',
-};
 
 export default function EventTimeline() {
   const scrollRef = useRef<HTMLDivElement>(null);
