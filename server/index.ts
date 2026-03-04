@@ -20,7 +20,17 @@ dotenv.config({ path: join(__dir, '../.env') });
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// In production the server serves the built client (same origin), so CORS is
+// only needed for local dev where client runs on a different port.
+const devOrigins = ['http://localhost:5173', 'http://localhost:3000'];
+app.use(cors({
+  origin: (origin, cb) => {
+    // No origin = same-origin request (browsers omit it) — always allow.
+    // In dev allow localhost ports; in production block all cross-origin.
+    if (!origin || devOrigins.includes(origin)) return cb(null, true);
+    cb(new Error('CORS: origin not allowed'));
+  },
+}));
 app.use(express.json());
 
 // ── HTTP caching headers ──────────────────────────────────────────────────────
