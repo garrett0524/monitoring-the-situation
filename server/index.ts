@@ -58,7 +58,8 @@ app.get('/api/health', (_req, res) => {
 });
 
 // ── Serve built client in production ─────────────────────────────────────────
-const clientDist = join(__dir, '../client/dist');
+// __dir = server/dist/ at runtime → ../../client/dist = project root's client/dist
+const clientDist = join(__dir, '../../client/dist');
 app.use(express.static(clientDist));
 app.get('/{*path}', (_req, res) => res.sendFile(join(clientDist, 'index.html')));
 
